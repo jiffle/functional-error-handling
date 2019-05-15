@@ -2,6 +2,7 @@ import io.vavr.control.Try
 import io.vavr.kotlin.`try`
 import io.vavr.kotlin.failure
 import io.vavr.kotlin.success
+import org.apache.logging.log4j.kotlin.Logging
 import java.lang.RuntimeException
 
 data class HappyData( val name: String)
@@ -25,7 +26,7 @@ data class HappyResponse( val data: String) : TryResponse()
 data class SadResponse(val reason: String, val stackTrace: Array<StackTraceElement>) : TryResponse()
 
 
-class TryAdaptor {
+class TryAdaptor : Logging {
 
     fun loadMyData( id: Int) : Try<HappyData> {
         return `try` {
@@ -34,6 +35,7 @@ class TryAdaptor {
             result
         }.onFailure {
             // log any failures
+            logger.error( "Some error", it)
         }
     }
 
